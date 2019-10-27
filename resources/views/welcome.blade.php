@@ -9,12 +9,12 @@
         <!-- Blog Entries Column -->
         <div class="col-md-8">
 
-            <h1 class="my-4">Page Heading
-                <small>Secondary Text</small>
+            <h1 class="my-4">Blog
+                <small>Controller</small>
             </h1>
 
             <!-- Blog Post -->
-            @foreach($post as $post)
+            @foreach($posts as $post)
             <div class="card mb-4">
                 @if(isset($post->image))
                 <img class="card-img-top" src="/storage/{{ $post->image }}" alt="Card image cap">
@@ -24,6 +24,14 @@
                     <div class="card-body">
                     <h2 class="card-title">{{ $post->title }}</h2>
                     <p class="card-text">{{ $post->body }}</p>
+                        @if($post->tag->count() > 0 )
+                        Tags :
+                        @foreach($post->tag as $tag)
+                    <a href="/post/tag/{{ $tag->id }}"  class="btn btn-light">{{ $tag->name }}</a>
+                    @endforeach
+                            <br>
+                            <br>
+                        @endif
                     <a href="/post/{{ $post->id }}" class="btn btn-primary">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
@@ -35,12 +43,7 @@
 
             <!-- Pagination -->
             <ul class="pagination justify-content-center mb-4">
-                <li class="page-item">
-                    <a class="page-link" href="#">&larr; Older</a>
-                </li>
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">Newer &rarr;</a>
-                </li>
+                <p> {{ $posts->links() }}</p>
             </ul>
 
         </div>
@@ -63,35 +66,19 @@
 
             <!-- Categories Widget -->
             <div class="card my-4">
-                <h5 class="card-header">Categories</h5>
+                <h5 class="card-header">Top HashTags</h5>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-6">
-                            <ul class="list-unstyled mb-0">
-                                <li>
-                                    <a href="#">Web Design</a>
-                                </li>
-                                <li>
-                                    <a href="#">HTML</a>
-                                </li>
-                                <li>
-                                    <a href="#">Freebies</a>
-                                </li>
-                            </ul>
+                            @foreach($hashtags as $tag)
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        <a href="/post/tag/{{ $tag->id }}">{{ $tag->name }}</a>
+                                </ul>
+                            @endforeach
+
                         </div>
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled mb-0">
-                                <li>
-                                    <a href="#">JavaScript</a>
-                                </li>
-                                <li>
-                                    <a href="#">CSS</a>
-                                </li>
-                                <li>
-                                    <a href="#">Tutorials</a>
-                                </li>
-                            </ul>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -100,7 +87,7 @@
             <div class="card my-4">
                 <h5 class="card-header">Top Users</h5>
                 <div class="card-body">
-                    @foreach($user as $user)
+                    @foreach($users as $user)
                         <a href="/profile/{{ $user->id }}"> <p>{{ $user->username }}</p></a>
                         @endforeach
                 </div>

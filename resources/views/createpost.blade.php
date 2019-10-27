@@ -44,6 +44,23 @@
             </div>
 
             <div class="form-group row">
+                <label for="text" class="col-md-4 col-form-label text-md-right">Tags</label>
+
+                <div class="col-md-6">
+                    <textarea class="form-control "
+                              name="tag"
+                              rows="1"
+                              cols="1"></textarea>
+
+                    @error('text')
+                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label class="col-md-4 control-label text-md-right">Post Image</label>
                 <div class="col-md-6">
                     <input  class="form-control-file" name="postimage" type="file" >

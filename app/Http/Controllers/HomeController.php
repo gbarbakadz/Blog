@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
 use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,11 +12,12 @@ class HomeController extends Controller
 {
 
     public function index() {
-        $post = Post::all();
-        $user = \App\User::withCount('post')->orderBy('post_count' , 'desc')->take(10)->get();
+        $posts = Post::paginate(5);
+        $users = \App\User::withCount('post')->orderBy('post_count' , 'desc')->take(10)->get();
+        $hashtags = Tag::withCount('post')->orderBy('post_count' , 'desc')->take(10)->get();
 
 
-        return view('welcome' , compact('post' , 'user'));
+        return view('welcome' , compact('posts' , 'users' , 'hashtags'));
     }
 
     public function logout() {

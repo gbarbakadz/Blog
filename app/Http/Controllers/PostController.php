@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Post;
+use App\Tag;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,9 @@ class PostController extends Controller
 
     public function post($id) {
         $post = Post::FindOrFail($id);
-        $comm = $post->comment()->orderBy('id', 'DESC')->get();
-        return view('post' , compact('post' , 'comm' ));
+        $comments = $post->comment()->orderBy('id', 'DESC')->get();
+        $users = \App\User::withCount('post')->orderBy('post_count' , 'desc')->take(10)->get();
+        return view('post' , compact('post' , 'comments' , 'users' ));
     }
 
 
@@ -43,13 +45,40 @@ class PostController extends Controller
             'image' => $imagePath,
         ]);
 
+        if (\request('tag')) {
+
+
+            $array = explode(' ' , \request('tag'));
+            $post = Post::all()->sortBy('created_at')->last();
+
+            foreach ($array as $arr) {
+
+
+                if (Tag::where('name',  $arr)->exists()) {
+                    $tagged = Tag::where('name' , $arr)->first();
+                    $post->tag()->attach($tagged);
+                }
+                else {
+                    $tag = new Tag();
+                    $tag->name = $arr;
+                    $tag->save();
+                    $tagged = Tag::where('name' , $arr)->first();
+                    $post->tag()->attach($tagged);
+                }
+
+
+            }
+
+
+
+        }
+
         return redirect('/');
     }
 
     public function editpost() {
         $user = Auth::user();
-
-        return view('editpost' , compact('user'));
+        return view('editpost' , compact('user' ));
 
     }
 

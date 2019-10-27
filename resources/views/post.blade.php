@@ -57,16 +57,16 @@
             </div>
 
             <!-- Single Comment -->
-            @foreach($comm as $comm)
+            @foreach($comments as $comment)
             <div class="media mb-4">
-                @if(isset($comm->user->image))
-                <img class="d-flex mr-3 rounded-circle" src="/storage/{{ $comm->user->image }}" width="50" height="50" alt="">
+                @if(isset($comment->user->image))
+                <img class="d-flex mr-3 rounded-circle" src="/storage/{{ $comment->user->image }}" width="50" height="50" alt="">
                 @else
                     <img class="d-flex mr-3 rounded-circle" src="https://previews.123rf.com/images/bearsky23/bearsky231608/bearsky23160800013/61158516-standard-user-icon-set-with-men-women-and-multiple-people.jpg" width="50" height="50" alt="">
                 @endif
                     <div class="media-body">
-                    <a href="/profile/{{ $comm->user->id }}"> <h5 class="mt-0">{{ $comm->user->username }}</h5></a>
-                    {{ $comm->comments  }}
+                    <a href="/profile/{{ $comment->user->id }}"> <h5 class="mt-0">{{ $comment->user->username }}</h5></a>
+                    {{ $comment->comments  }}
                     <div >
                         <a href="#">replay</a>
                     </div>
@@ -132,9 +132,11 @@
 
             <!-- Side Widget -->
             <div class="card my-4">
-                <h5 class="card-header">Side Widget</h5>
+                <h5 class="card-header">Top Users</h5>
                 <div class="card-body">
-                    You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+                    @foreach($users as $user)
+                        <a href="/profile/{{ $user->id }}"> <p>{{ $user->username }}</p></a>
+                    @endforeach
                 </div>
             </div>
 
