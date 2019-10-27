@@ -19,7 +19,8 @@ class PostController extends Controller
         $post = Post::FindOrFail($id);
         $comments = $post->comment()->orderBy('id', 'DESC')->get();
         $users = \App\User::withCount('post')->orderBy('post_count' , 'desc')->take(10)->get();
-        return view('post' , compact('post' , 'comments' , 'users' ));
+        $hashtags = Tag::withCount('post')->orderBy('post_count' , 'desc')->take(10)->get();
+        return view('post' , compact('post' , 'comments' , 'users' , 'hashtags' ));
     }
 
 
